@@ -5,6 +5,13 @@ import type { FixedCost } from "@/features/fixed-costs/fixed-cost.validator";
 import type { Subscription } from "@/features/subscriptions/subscription.validator";
 import type { AccountReceivable } from "@/features/accounts/account.validator";
 import type { RecurringExpense } from "@/features/recurring/recurring.validator";
+import type { IntakeItem, Classification } from "@/features/intake/intake.validator";
+import {
+  toFixedCost,
+  toSubscription,
+  toCreditCardExpense,
+  toAccountReceivable,
+} from "@/features/intake/intake.mapper";
 import {
   seedCategories,
   seedCreditCards,
@@ -25,6 +32,7 @@ export interface AppState {
   creditCardExpenses: CreditCardExpense[];
   accountsReceivable: AccountReceivable[];
   recurring: RecurringExpense[];
+  intakeItems: IntakeItem[];
   salary: number;
 }
 
@@ -57,6 +65,13 @@ export interface AppActions {
   addRecurring: (item: RecurringExpense) => void;
   updateRecurring: (id: string, data: Partial<RecurringExpense>) => void;
   deleteRecurring: (id: string) => void;
+  // Intake
+  addIntakeItem: (item: IntakeItem) => void;
+  addIntakeItems: (items: IntakeItem[]) => void;
+  updateIntakeItem: (id: string, data: Partial<IntakeItem>) => void;
+  deleteIntakeItem: (id: string) => void;
+  dismissIntakeItem: (id: string) => void;
+  classifyAndConfirmItem: (id: string, classification: Classification) => void;
 }
 
 export type AppStore = AppState & AppActions;
@@ -95,6 +110,7 @@ export const appStore = createStore<AppStore>()((set) => {
     creditCardExpenses: seedCreditCardExpenses,
     accountsReceivable: seedAccountsReceivable,
     recurring: seedRecurring,
+    intakeItems: [],
     salary: 5000,
 
     // Actions
@@ -119,6 +135,58 @@ export const appStore = createStore<AppStore>()((set) => {
     addRecurring: rec.add(set),
     updateRecurring: rec.update(set),
     deleteRecurring: rec.delete(set),
+
+    // Intake actions
+    addIntakeItem: (item: IntakeItem) =>
+      set((s) => ({ intakeItems: [...s.intakeItems, item] })),
+    addIntakeItems: (items: IntakeItem[]) =>
+      set((s) => ({ intakeItems: [...s.intakeItems, ...items] })),
+    updateIntakeItem: (id: string, data: Partial<IntakeItem>) =>
+      set((s) => ({
+        intakeItems: s.intakeItems.map((i) =>
+          i.id === id ? { ...i, ...data, updatedAt: new Date().toISOString() } : i,
+        ),
+      })),
+    deleteIntakeItem: (id: string) =>
+      set((s) => ({ intakeItems: s.intakeItems.filter((i) => i.id !== id) })),
+    dismissIntakeItem: (id: string) =>
+      set((s) => ({
+        intakeItems: s.intakeItems.map((i) =>
+          i.id === id ? { ...i, status: "dismissed" as const, updatedAt: new Date().toISOString() } : i,
+        ),
+      })),
+    classifyAndConfirmItem: (id: string, classification: Classification) =>
+      set((s) => {
+        const item = s.intakeItems.find((i) => i.id === id);
+        if (!item) return {};
+
+        const updates: Partial<AppState> = {
+          intakeItems: s.intakeItems.map((i) =>
+            i.id === id
+              ? { ...i, status: "classified" as const, classification, updatedAt: new Date().toISOString() }
+              : i,
+          ),
+        };
+
+        switch (classification.destination) {
+          case "costo_fijo":
+            updates.fixedCosts = [...s.fixedCosts, toFixedCost(item, classification)];
+            break;
+          case "plataforma":
+            updates.subscriptions = [...s.subscriptions, toSubscription(item, classification)];
+            break;
+          case "tarjeta_credito":
+            updates.creditCardExpenses = [...s.creditCardExpenses, toCreditCardExpense(item, classification)];
+            break;
+          case "cuenta_cobrar":
+            updates.accountsReceivable = [...s.accountsReceivable, toAccountReceivable(item, classification)];
+            break;
+          case "no_agregar":
+            break;
+        }
+
+        return updates;
+      }),
   };
 });
 

@@ -9,101 +9,101 @@ importers:
   .:
     dependencies:
       '@astrojs/cloudflare':
-        specifier: ^13.1.0
+        specifier: 13.1.0
         version: 13.1.0(astro@6.0.3(jiti@2.6.1)(lightningcss@1.31.1)(rollup@4.59.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(workerd@1.20260310.1)(wrangler@4.72.0(@cloudflare/workers-types@4.20260312.1))(yaml@2.8.2)
       '@astrojs/node':
-        specifier: ^10.0.0
+        specifier: 10.0.0
         version: 10.0.0(astro@6.0.3(jiti@2.6.1)(lightningcss@1.31.1)(rollup@4.59.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))
       '@astrojs/react':
-        specifier: ^5.0.0
+        specifier: 5.0.0
         version: 5.0.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@2.6.1)(lightningcss@1.31.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tsx@4.21.0)(yaml@2.8.2)
       '@hookform/resolvers':
-        specifier: ^5.2.2
+        specifier: 5.2.2
         version: 5.2.2(react-hook-form@7.71.2(react@19.2.4))
       '@nanostores/react':
-        specifier: ^1.0.0
+        specifier: 1.0.0
         version: 1.0.0(nanostores@1.1.1)(react@19.2.4)
       '@prisma/client':
-        specifier: ^6.19.2
+        specifier: 6.19.2
         version: 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
       '@prisma/client-runtime-utils':
-        specifier: ^7.5.0
+        specifier: 7.5.0
         version: 7.5.0
       '@tailwindcss/vite':
-        specifier: ^4.2.1
+        specifier: 4.2.1
         version: 4.2.1(vite@7.3.1(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       '@tanstack/react-table':
-        specifier: ^8.21.3
+        specifier: 8.21.3
         version: 8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       astro:
-        specifier: ^6.0.3
+        specifier: 6.0.3
         version: 6.0.3(jiti@2.6.1)(lightningcss@1.31.1)(rollup@4.59.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
       class-variance-authority:
-        specifier: ^0.7.1
+        specifier: 0.7.1
         version: 0.7.1
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       lucide-react:
-        specifier: ^0.577.0
+        specifier: 0.577.0
         version: 0.577.0(react@19.2.4)
       msw:
-        specifier: ^2.12.10
+        specifier: 2.12.10
         version: 2.12.10(typescript@5.9.3)
       nanostores:
-        specifier: ^1.1.1
+        specifier: 1.1.1
         version: 1.1.1
       prisma:
-        specifier: ^6.19.2
+        specifier: 6.19.2
         version: 6.19.2(typescript@5.9.3)
       radix-ui:
-        specifier: ^1.4.3
+        specifier: 1.4.3
         version: 1.4.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react:
-        specifier: ^19.2.4
+        specifier: 19.2.4
         version: 19.2.4
       react-dom:
-        specifier: ^19.2.4
+        specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
       react-hook-form:
-        specifier: ^7.71.2
+        specifier: 7.71.2
         version: 7.71.2(react@19.2.4)
       recharts:
-        specifier: ^3.8.0
+        specifier: 3.8.0
         version: 3.8.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react-is@19.2.4)(react@19.2.4)(redux@5.0.1)
       tailwind-merge:
-        specifier: ^3.5.0
+        specifier: 3.5.0
         version: 3.5.0
       tailwindcss:
-        specifier: ^4.2.1
+        specifier: 4.2.1
         version: 4.2.1
       wrangler:
-        specifier: ^4.72.0
+        specifier: 4.72.0
         version: 4.72.0(@cloudflare/workers-types@4.20260312.1)
       zod:
-        specifier: ^4.3.6
+        specifier: 4.3.6
         version: 4.3.6
       zustand:
-        specifier: ^5.0.11
+        specifier: 5.0.11
         version: 5.0.11(@types/react@19.2.14)(immer@11.1.4)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
     devDependencies:
       '@astrojs/check':
-        specifier: ^0.9.7
+        specifier: 0.9.7
         version: 0.9.7(prettier@3.8.1)(typescript@5.9.3)
       '@types/react':
-        specifier: ^19.2.14
+        specifier: 19.2.14
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
       tsx:
-        specifier: ^4.21.0
+        specifier: 4.21.0
         version: 4.21.0
       typescript:
-        specifier: ^5.9.3
+        specifier: 5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^4.0.18
+        specifier: 4.0.18
         version: 4.0.18(jiti@2.6.1)(lightningcss@1.31.1)(msw@2.12.10(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.2)
 
 packages:

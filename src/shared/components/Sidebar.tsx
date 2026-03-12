@@ -1,5 +1,7 @@
 import {
   LayoutDashboard,
+  Inbox,
+  MessageCircle,
   Receipt,
   Tv,
   CreditCard,
@@ -14,6 +16,8 @@ import { NAV_ITEMS } from "@/shared/constants";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   "layout-dashboard": LayoutDashboard,
+  inbox: Inbox,
+  "message-circle": MessageCircle,
   receipt: Receipt,
   tv: Tv,
   "credit-card": CreditCard,

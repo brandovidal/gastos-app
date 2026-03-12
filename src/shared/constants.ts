@@ -62,8 +62,18 @@ export const PAYMENT_STATUS_COLORS: Record<string, string> = {
   omitido: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
 };
 
+export const INTAKE_DESTINATION_LABELS: Record<string, string> = {
+  costo_fijo: "Costos Fijos",
+  plataforma: "Plataformas",
+  tarjeta_credito: "Tarjeta de Crédito",
+  cuenta_cobrar: "Cuenta por Cobrar",
+  no_agregar: "No agregar",
+};
+
 export const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: "layout-dashboard" },
+  { href: "/bandeja", label: "Bandeja", icon: "inbox" },
+  { href: "/whatsapp", label: "WhatsApp", icon: "message-circle" },
   { href: "/costos-fijos", label: "Costos Fijos", icon: "receipt" },
   { href: "/plataformas", label: "Plataformas", icon: "tv" },
   { href: "/tarjetas", label: "Tarjetas", icon: "credit-card" },
