@@ -1,0 +1,32 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = "Gastos App" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="App de seguimiento de gastos personales" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen antialiased">
+    <slot />
+    <script>
+      const theme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (theme === "dark" || (!theme && prefersDark)) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/globals.css";
+</style>

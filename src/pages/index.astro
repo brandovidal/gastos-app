@@ -1,17 +1,37 @@
 ---
+import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import { MonthlySummary } from "@/features/dashboard/components/MonthlySummary";
+import { ExpenseChart } from "@/features/dashboard/components/ExpenseChart";
+import { CategoryRing } from "@/features/dashboard/components/CategoryRing";
+import { BillingCycleCard } from "@/features/dashboard/components/BillingCycleCard";
+import {
+  getDashboardSummary,
+  getCategoryBreakdown,
+  getCreditCardSummaries,
+  getExpensesByMonth,
+} from "@/features/dashboard/dashboard.service";
+import { getCurrentMonth, getCurrentYear, getMonthName } from "@/shared/lib/dates";
 
+const month = getCurrentMonth();
+const year = getCurrentYear();
+
+const [summary, categories, creditCards, trend] = await Promise.all([
+  getDashboardSummary(month, year),
+  getCategoryBreakdown(month, year),
+  getCreditCardSummaries(month, year),
+  getExpensesByMonth(6),
+]);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<DashboardLayout title={`Dashboard - ${getMonthName(month)} ${year}`}>
+  <div class="space-y-6">
+    <MonthlySummary summary={summary} />
+
+    <div class="grid gap-6 md:grid-cols-2">
+      <ExpenseChart client:load data={trend} />
+      <CategoryRing client:load data={categories} />
+    </div>
+
+    <BillingCycleCard cards={creditCards} />
+  </div>
+</DashboardLayout>
