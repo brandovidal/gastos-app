@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppStore } from "@/mocks/store";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { Button } from "@/ui/button";
@@ -7,6 +8,7 @@ import { Progress } from "@/ui/progress";
 import { Plus, Trash2, CheckCircle2, Clock, AlertCircle } from "lucide-react";
 import { formatCurrency } from "@/shared/lib/currency";
 import { formatDate } from "@/shared/lib/dates";
+import { AccountReceivableDialog } from "./AccountReceivableDialog";
 
 const STATUS_CONFIG: Record<string, { label: string; icon: typeof Clock; color: string }> = {
   pendiente: { label: "Pendiente", icon: Clock, color: "text-yellow-500" },
@@ -18,6 +20,8 @@ export function AccountsReceivableTable() {
   const accounts = useAppStore((s) => s.accountsReceivable);
   const deleteAccount = useAppStore((s) => s.deleteAccountReceivable);
   const updateAccount = useAppStore((s) => s.updateAccountReceivable);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const totalPending = accounts
     .filter((a) => a.status !== "pagado")
@@ -34,7 +38,7 @@ export function AccountsReceivableTable() {
           <p className="text-sm text-muted-foreground">Por cobrar</p>
           <p className="text-2xl font-bold">{formatCurrency(totalPending)}</p>
         </div>
-        <Button size="sm"><Plus className="mr-1 h-4 w-4" /> Nueva cuenta</Button>
+        <Button size="sm" onClick={() => setDialogOpen(true)}><Plus className="mr-1 h-4 w-4" /> Nueva cuenta</Button>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -97,6 +101,8 @@ export function AccountsReceivableTable() {
           );
         })}
       </div>
+
+      <AccountReceivableDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </div>
   );
 }

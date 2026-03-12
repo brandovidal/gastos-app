@@ -7,18 +7,22 @@ import { Input } from "@/ui/input";
 import { Progress } from "@/ui/progress";
 import { Plus, Trash2, Pencil, AlertTriangle } from "lucide-react";
 import { formatCurrency } from "@/shared/lib/currency";
+import { CategoryDialog } from "./CategoryDialog";
+import type { Category } from "../category.validator";
 
 export function CategoryManager() {
   const categories = useAppStore((s) => s.categories);
   const budgets = useAppStore((s) => s.budgets);
   const fixedCosts = useAppStore((s) => s.fixedCosts);
   const deleteCategory = useAppStore((s) => s.deleteCategory);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | undefined>();
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">{categories.length} categorías</p>
-        <Button size="sm"><Plus className="mr-1 h-4 w-4" /> Nueva categoría</Button>
+        <Button size="sm" onClick={() => { setEditingCategory(undefined); setDialogOpen(true); }}><Plus className="mr-1 h-4 w-4" /> Nueva categoría</Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -42,7 +46,7 @@ export function CategoryManager() {
                   <div className="flex gap-1">
                     {!cat.isDefault && (
                       <>
-                        <Button variant="ghost" size="icon" className="h-7 w-7">
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { setEditingCategory(cat); setDialogOpen(true); }}>
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => deleteCategory(cat.id)}>
@@ -87,6 +91,12 @@ export function CategoryManager() {
           );
         })}
       </div>
+
+      <CategoryDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        category={editingCategory}
+      />
     </div>
   );
 }

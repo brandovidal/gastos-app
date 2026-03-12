@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppStore } from "@/mocks/store";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { Button } from "@/ui/button";
@@ -6,6 +7,7 @@ import { Card, CardContent } from "@/ui/card";
 import { Switch } from "@/ui/switch";
 import { Plus, Trash2, Play, Calendar } from "lucide-react";
 import { formatCurrency } from "@/shared/lib/currency";
+import { RecurringDialog } from "./RecurringDialog";
 
 const TARGET_LABELS: Record<string, string> = {
   fixed_cost: "Costo fijo",
@@ -19,6 +21,7 @@ export function RecurringList() {
   const creditCards = useAppStore((s) => s.creditCards);
   const updateRecurring = useAppStore((s) => s.updateRecurring);
   const deleteRecurring = useAppStore((s) => s.deleteRecurring);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const totalMonthly = recurring
     .filter((r) => r.isActive)
@@ -39,7 +42,7 @@ export function RecurringList() {
           <Button variant="outline" size="sm">
             <Play className="mr-1 h-4 w-4" /> Generar del mes
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setDialogOpen(true)}>
             <Plus className="mr-1 h-4 w-4" /> Nuevo recurrente
           </Button>
         </div>
@@ -91,6 +94,8 @@ export function RecurringList() {
           );
         })}
       </div>
+
+      <RecurringDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </div>
   );
 }

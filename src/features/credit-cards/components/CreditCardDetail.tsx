@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppStore } from "@/mocks/store";
 import { StatusBadge } from "@/shared/components/StatusBadge";
 import { CurrencyDisplay } from "@/shared/components/CurrencyDisplay";
@@ -14,6 +15,7 @@ import {
 import { Plus, Trash2, ArrowLeft } from "lucide-react";
 import { formatDate } from "@/shared/lib/dates";
 import { CREDIT_CARD_STATUSES, PAYMENT_STATUS_LABELS } from "@/shared/constants";
+import { CreditCardExpenseDialog } from "./CreditCardExpenseDialog";
 
 interface CreditCardDetailProps {
   cardCode: string;
@@ -24,6 +26,8 @@ export function CreditCardDetail({ cardCode }: CreditCardDetailProps) {
   const expenses = useAppStore((s) => s.creditCardExpenses);
   const updateExpense = useAppStore((s) => s.updateCreditCardExpense);
   const deleteExpense = useAppStore((s) => s.deleteCreditCardExpense);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const card = creditCards.find((c) => c.code === cardCode);
   if (!card) return <EmptyState title="Tarjeta no encontrada" />;
@@ -59,7 +63,7 @@ export function CreditCardDetail({ cardCode }: CreditCardDetailProps) {
       </Card>
 
       <div className="flex justify-end">
-        <Button size="sm"><Plus className="mr-1 h-4 w-4" /> Nuevo gasto</Button>
+        <Button size="sm" onClick={() => setDialogOpen(true)}><Plus className="mr-1 h-4 w-4" /> Nuevo gasto</Button>
       </div>
 
       {cardExpenses.length === 0 ? (
@@ -123,6 +127,12 @@ export function CreditCardDetail({ cardCode }: CreditCardDetailProps) {
           </Table>
         </div>
       )}
+
+      <CreditCardExpenseDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        creditCardId={card.id}
+      />
     </div>
   );
 }

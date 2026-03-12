@@ -24,6 +24,8 @@ import { Input } from "@/ui/input";
 import { Plus, Search, Trash2, Pencil } from "lucide-react";
 import { formatDate } from "@/shared/lib/dates";
 import { PAYMENT_STATUSES, PAYMENT_STATUS_LABELS } from "@/shared/constants";
+import { FixedCostDialog } from "./FixedCostDialog";
+import type { FixedCost } from "../fixed-cost.validator";
 
 export function FixedCostTable() {
   const fixedCosts = useAppStore((s) => s.fixedCosts);
@@ -34,6 +36,8 @@ export function FixedCostTable() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<FixedCost | undefined>();
 
   const filtered = fixedCosts
     .filter((fc) => fc.paymentMonth === 3 && fc.paymentYear === 2026)
@@ -80,7 +84,7 @@ export function FixedCostTable() {
             </SelectContent>
           </Select>
         </div>
-        <Button size="sm">
+        <Button size="sm" onClick={() => { setEditingItem(undefined); setDialogOpen(true); }}>
           <Plus className="mr-1 h-4 w-4" /> Nuevo gasto
         </Button>
       </div>
@@ -151,7 +155,7 @@ export function FixedCostTable() {
                     <TableCell className="text-sm">{fc.account ?? "—"}</TableCell>
                     <TableCell>
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" className="h-7 w-7">
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { setEditingItem(fc); setDialogOpen(true); }}>
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button
@@ -175,6 +179,12 @@ export function FixedCostTable() {
           </div>
         </div>
       )}
+
+      <FixedCostDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        fixedCost={editingItem}
+      />
     </div>
   );
 }

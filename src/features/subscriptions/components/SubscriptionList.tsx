@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppStore } from "@/mocks/store";
 import { StatusBadge } from "@/shared/components/StatusBadge";
 import { CurrencyDisplay } from "@/shared/components/CurrencyDisplay";
@@ -7,6 +8,8 @@ import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
 import { Plus, Trash2, Pencil } from "lucide-react";
+import { SubscriptionDialog } from "./SubscriptionDialog";
+import type { Subscription } from "../subscription.validator";
 
 const PERIOD_LABELS: Record<string, string> = {
   quincenal: "Quincenal",
@@ -29,6 +32,8 @@ const PERIOD_COLORS: Record<string, string> = {
 export function SubscriptionList() {
   const subscriptions = useAppStore((s) => s.subscriptions);
   const deleteSubscription = useAppStore((s) => s.deleteSubscription);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingSub, setEditingSub] = useState<Subscription | undefined>();
 
   const current = subscriptions.filter((s) => s.paymentMonth === 3 && s.paymentYear === 2026);
   const total = current.reduce((sum, s) => sum + (s.amountInPEN ?? s.amount), 0);
@@ -40,7 +45,7 @@ export function SubscriptionList() {
           <p className="text-sm text-muted-foreground">{current.length} plataformas activas</p>
           <p className="text-2xl font-bold">S/ {total.toFixed(2)} <span className="text-sm font-normal text-muted-foreground">/mes</span></p>
         </div>
-        <Button size="sm">
+        <Button size="sm" onClick={() => { setEditingSub(undefined); setDialogOpen(true); }}>
           <Plus className="mr-1 h-4 w-4" /> Nueva plataforma
         </Button>
       </div>
@@ -55,7 +60,7 @@ export function SubscriptionList() {
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-base">{sub.description}</CardTitle>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { setEditingSub(sub); setDialogOpen(true); }}>
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
                     <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => deleteSubscription(sub.id)}>
@@ -80,6 +85,12 @@ export function SubscriptionList() {
           ))}
         </div>
       )}
+
+      <SubscriptionDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        subscription={editingSub}
+      />
     </div>
   );
 }
