@@ -1,11 +1,12 @@
-import { useStore } from "@nanostores/react";
 import { Moon, Sun } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/ui/button";
-import { $theme, initTheme, toggleTheme } from "@/shared/hooks/useTheme";
+import { useThemeStore } from "@/shared/hooks/useTheme";
 
 export function ThemeToggle() {
-  const theme = useStore($theme);
+  const theme = useThemeStore((s) => s.theme);
+  const initTheme = useThemeStore((s) => s.initTheme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
   useEffect(() => {
     initTheme();
