@@ -96,14 +96,14 @@ model Subscription {
 }
 
 model CreditCard {
-  id              String              @id @default(cuid())
-  code            String              @unique
+  id              String   @id @default(cuid())
+  code            String   @unique
   name            String
   billingCloseDay Int
   paymentDueDay   Int
   color           String?
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   expenses CreditCardExpense[]
 
@@ -137,20 +137,20 @@ model CreditCardExpense {
 }
 
 model AccountReceivable {
-  id          String    @id @default(cuid())
-  description String
-  amount      Float
-  person      String
-  status      String    @default("pendiente")
-  currency    String    @default("PEN")
+  id           String    @id @default(cuid())
+  description  String
+  amount       Float
+  person       String
+  status       String    @default("pendiente")
+  currency     String    @default("PEN")
   exchangeRate Float?
-  amountInPEN Float?
-  dueDate     DateTime?
-  paidDate    DateTime?
-  paidAmount  Float?
-  observation String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  amountInPEN  Float?
+  dueDate      DateTime?
+  paidDate     DateTime?
+  paidAmount   Float?
+  observation  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@index([status])
   @@map("accounts_receivable")
