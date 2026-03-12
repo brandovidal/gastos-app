@@ -15,12 +15,10 @@ import { getCurrentMonth, getCurrentYear, getMonthName } from "@/shared/lib/date
 const month = getCurrentMonth();
 const year = getCurrentYear();
 
-const [summary, categories, creditCards, trend] = await Promise.all([
-  getDashboardSummary(month, year),
-  getCategoryBreakdown(month, year),
-  getCreditCardSummaries(month, year),
-  getExpensesByMonth(6),
-]);
+const summary = getDashboardSummary(month, year);
+const categories = getCategoryBreakdown(month, year);
+const creditCards = getCreditCardSummaries(month, year);
+const trend = getExpensesByMonth(6);
 ---
 
 <DashboardLayout title={`Dashboard - ${getMonthName(month)} ${year}`}>

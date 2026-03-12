@@ -1,0 +1,8 @@
+---
+import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import { RecurringList } from "@/features/recurring/components/RecurringList";
+---
+
+<DashboardLayout title="Gastos Recurrentes">
+  <RecurringList client:load />
+</DashboardLayout>

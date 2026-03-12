@@ -1,0 +1,89 @@
+import type { Category, CategoryBudget } from "@/features/categories/category.validator";
+import type { CreditCard, CreditCardExpense } from "@/features/credit-cards/credit-card.validator";
+import type { FixedCost } from "@/features/fixed-costs/fixed-cost.validator";
+import type { Subscription } from "@/features/subscriptions/subscription.validator";
+import type { AccountReceivable } from "@/features/accounts/account.validator";
+import type { RecurringExpense } from "@/features/recurring/recurring.validator";
+
+// ── Categories ──
+export const seedCategories: Category[] = [
+  { id: "cat-1", name: "Personal", color: "#8B5CF6", icon: "user", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-2", name: "Prestamo", color: "#10B981", icon: "banknote", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-3", name: "Salud", color: "#3B82F6", icon: "heart-pulse", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-4", name: "Casa", color: "#6B7280", icon: "home", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-5", name: "Junta", color: "#EAB308", icon: "users", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-6", name: "Trabajo", color: "#64748B", icon: "briefcase", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-7", name: "Estudio", color: "#3B82F6", icon: "graduation-cap", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-8", name: "Comida", color: "#F97316", icon: "utensils", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-9", name: "Transporte", color: "#06B6D4", icon: "car", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-10", name: "Entretenimiento", color: "#EC4899", icon: "gamepad-2", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+];
+
+// ── Credit Cards ──
+export const seedCreditCards: CreditCard[] = [
+  { id: "cc-1", code: "cmr", name: "CMR Falabella", billingCloseDay: 10, paymentDueDay: 5, color: "#7C3AED", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cc-2", code: "oh", name: "Oh Pay", billingCloseDay: 10, paymentDueDay: 3, color: "#10B981", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cc-3", code: "io", name: "Interbank IO", billingCloseDay: 25, paymentDueDay: 12, color: "#3B82F6", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cc-4", code: "amex", name: "AMEX", billingCloseDay: 21, paymentDueDay: 15, color: "#F59E0B", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+];
+
+// ── Fixed Costs (Marzo 2026) ──
+export const seedFixedCosts: FixedCost[] = [
+  { id: "fc-1", description: "Luz - Enel", amount: 85.5, currency: "PEN", exchangeRate: null, amountInPEN: 85.5, expenseType: "necesario", paymentStatus: "pagado", paymentDate: "2026-03-10T00:00:00Z", dueDate: "2026-03-15T00:00:00Z", attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "BCP", installments: null, person: "Brando", observation: null, categoryId: "cat-4", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-10T00:00:00Z" },
+  { id: "fc-2", description: "Agua - Sedapal", amount: 45, currency: "PEN", exchangeRate: null, amountInPEN: 45, expenseType: "necesario", paymentStatus: "pendiente", paymentDate: null, dueDate: "2026-03-20T00:00:00Z", attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "BCP", installments: null, person: "Brando", observation: null, categoryId: "cat-4", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "fc-3", description: "Internet - Movistar", amount: 89.9, currency: "PEN", exchangeRate: null, amountInPEN: 89.9, expenseType: "necesario", paymentStatus: "pagado", paymentDate: "2026-03-05T00:00:00Z", dueDate: "2026-03-10T00:00:00Z", attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "Interbank", installments: null, person: "Brando", observation: null, categoryId: "cat-4", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-05T00:00:00Z" },
+  { id: "fc-4", description: "Gym", amount: 120, currency: "PEN", exchangeRate: null, amountInPEN: 120, expenseType: "con_culpa", paymentStatus: "pagado", paymentDate: "2026-03-01T00:00:00Z", dueDate: null, attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: null, installments: null, person: "Brando", observation: null, categoryId: "cat-1", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "fc-5", description: "Consulta médica", amount: 150, currency: "PEN", exchangeRate: null, amountInPEN: 150, expenseType: "necesario", paymentStatus: "pendiente", paymentDate: null, dueDate: "2026-03-25T00:00:00Z", attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: null, installments: null, person: "Brando", observation: null, categoryId: "cat-3", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "fc-6", description: "Gasolina", amount: 200, currency: "PEN", exchangeRate: null, amountInPEN: 200, expenseType: "necesario", paymentStatus: "pagado", paymentDate: "2026-03-08T00:00:00Z", dueDate: null, attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "Yape", installments: null, person: "Brando", observation: null, categoryId: "cat-9", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-08T00:00:00Z" },
+  { id: "fc-7", description: "Almuerzo semanal", amount: 350, currency: "PEN", exchangeRate: null, amountInPEN: 350, expenseType: "necesario", paymentStatus: "pagado", paymentDate: "2026-03-07T00:00:00Z", dueDate: null, attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "Yape", installments: null, person: "Brando", observation: null, categoryId: "cat-8", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-07T00:00:00Z" },
+  { id: "fc-8", description: "AWS Hosting", amount: 25, currency: "USD", exchangeRate: 3.72, amountInPEN: 93, expenseType: "necesario", paymentStatus: "pagado", paymentDate: "2026-03-02T00:00:00Z", dueDate: null, attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "Interbank", installments: null, person: "Brando", observation: null, categoryId: "cat-6", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-02T00:00:00Z" },
+  { id: "fc-9", description: "Préstamo hermana", amount: 500, currency: "PEN", exchangeRate: null, amountInPEN: 500, expenseType: "necesario", paymentStatus: "pendiente", paymentDate: null, dueDate: "2026-03-28T00:00:00Z", attentionDate: null, paymentMonth: 3, paymentYear: 2026, account: "Yape", installments: "3/6", person: "Brando", observation: "Cuota mensual", categoryId: "cat-2", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+];
+
+// ── Subscriptions ──
+export const seedSubscriptions: Subscription[] = [
+  { id: "sub-1", description: "Netflix", amount: 44.9, currency: "PEN", exchangeRate: null, amountInPEN: 44.9, expenseType: "con_culpa", paymentStatus: "pagado", period: "mensual", person: "compartido", account: "CMR", paymentMonth: 3, paymentYear: 2026, paymentDate: "2026-03-01T00:00:00Z", dueDate: null, comment: "Plan familiar", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "sub-2", description: "Spotify", amount: 22.9, currency: "PEN", exchangeRate: null, amountInPEN: 22.9, expenseType: "con_culpa", paymentStatus: "pagado", period: "mensual", person: "personal", account: null, paymentMonth: 3, paymentYear: 2026, paymentDate: "2026-03-05T00:00:00Z", dueDate: null, comment: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-05T00:00:00Z" },
+  { id: "sub-3", description: "ChatGPT Plus", amount: 20, currency: "USD", exchangeRate: 3.72, amountInPEN: 74.4, expenseType: "necesario", paymentStatus: "pagado", period: "mensual", person: "personal", account: "IO", paymentMonth: 3, paymentYear: 2026, paymentDate: "2026-03-10T00:00:00Z", dueDate: null, comment: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-10T00:00:00Z" },
+  { id: "sub-4", description: "YouTube Premium", amount: 26.9, currency: "PEN", exchangeRate: null, amountInPEN: 26.9, expenseType: "con_culpa", paymentStatus: "pendiente", period: "mensual", person: "compartido", account: null, paymentMonth: 3, paymentYear: 2026, paymentDate: null, dueDate: "2026-03-22T00:00:00Z", comment: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "sub-5", description: "iCloud 200GB", amount: 12.9, currency: "PEN", exchangeRate: null, amountInPEN: 12.9, expenseType: "necesario", paymentStatus: "pagado", period: "mensual", person: "personal", account: null, paymentMonth: 3, paymentYear: 2026, paymentDate: "2026-03-15T00:00:00Z", dueDate: null, comment: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-15T00:00:00Z" },
+  { id: "sub-6", description: "Claude Pro", amount: 20, currency: "USD", exchangeRate: 3.72, amountInPEN: 74.4, expenseType: "necesario", paymentStatus: "pagado", period: "mensual", person: "personal", account: "IO", paymentMonth: 3, paymentYear: 2026, paymentDate: "2026-03-12T00:00:00Z", dueDate: null, comment: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-12T00:00:00Z" },
+  { id: "sub-7", description: "Cursor Pro", amount: 20, currency: "USD", exchangeRate: 3.72, amountInPEN: 74.4, expenseType: "necesario", paymentStatus: "pagado", period: "mensual", person: "personal", account: "IO", paymentMonth: 3, paymentYear: 2026, paymentDate: "2026-03-08T00:00:00Z", dueDate: null, comment: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-08T00:00:00Z" },
+];
+
+// ── Credit Card Expenses ──
+export const seedCreditCardExpenses: CreditCardExpense[] = [
+  { id: "cce-1", description: "Wong supermercado", amount: 245.9, currency: "PEN", exchangeRate: null, amountInPEN: 245.9, expenseType: "necesario", paymentStatus: "pendiente", person: "Brando", installment: null, paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-02T00:00:00Z", observation: null, creditCardId: "cc-1", createdAt: "2026-03-02T00:00:00Z", updatedAt: "2026-03-02T00:00:00Z" },
+  { id: "cce-2", description: "Falabella ropa", amount: 189, currency: "PEN", exchangeRate: null, amountInPEN: 189, expenseType: "con_culpa", paymentStatus: "pendiente", person: "Danery", installment: "1/3", paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-05T00:00:00Z", observation: null, creditCardId: "cc-1", createdAt: "2026-03-05T00:00:00Z", updatedAt: "2026-03-05T00:00:00Z" },
+  { id: "cce-3", description: "Sodimac herramientas", amount: 320, currency: "PEN", exchangeRate: null, amountInPEN: 320, expenseType: "necesario", paymentStatus: "pendiente", person: "Brando", installment: "1/6", paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-03T00:00:00Z", observation: "Refacción baño", creditCardId: "cc-1", createdAt: "2026-03-03T00:00:00Z", updatedAt: "2026-03-03T00:00:00Z" },
+  { id: "cce-4", description: "Plaza Vea", amount: 156.5, currency: "PEN", exchangeRate: null, amountInPEN: 156.5, expenseType: "necesario", paymentStatus: "pendiente", person: "Brando", installment: null, paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-06T00:00:00Z", observation: null, creditCardId: "cc-2", createdAt: "2026-03-06T00:00:00Z", updatedAt: "2026-03-06T00:00:00Z" },
+  { id: "cce-5", description: "Farmacia Universal", amount: 78, currency: "PEN", exchangeRate: null, amountInPEN: 78, expenseType: "necesario", paymentStatus: "pagado", person: "Brando", installment: null, paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-08T00:00:00Z", observation: null, creditCardId: "cc-2", createdAt: "2026-03-08T00:00:00Z", updatedAt: "2026-03-08T00:00:00Z" },
+  { id: "cce-6", description: "Amazon compra", amount: 45, currency: "USD", exchangeRate: 3.72, amountInPEN: 167.4, expenseType: "con_culpa", paymentStatus: "pendiente", person: "Brando", installment: null, paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-07T00:00:00Z", observation: null, creditCardId: "cc-3", createdAt: "2026-03-07T00:00:00Z", updatedAt: "2026-03-07T00:00:00Z" },
+  { id: "cce-7", description: "Rappi delivery", amount: 42.5, currency: "PEN", exchangeRate: null, amountInPEN: 42.5, expenseType: "con_culpa", paymentStatus: "pendiente", person: "Brando", installment: null, paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-09T00:00:00Z", observation: null, creditCardId: "cc-3", createdAt: "2026-03-09T00:00:00Z", updatedAt: "2026-03-09T00:00:00Z" },
+  { id: "cce-8", description: "Apple Store", amount: 15, currency: "USD", exchangeRate: 3.72, amountInPEN: 55.8, expenseType: "con_culpa", paymentStatus: "pendiente", person: "Brando", installment: null, paymentMonth: 3, paymentYear: 2026, processDate: "2026-03-04T00:00:00Z", observation: "App comprada", creditCardId: "cc-3", createdAt: "2026-03-04T00:00:00Z", updatedAt: "2026-03-04T00:00:00Z" },
+  { id: "cce-9", description: "Hotel Cusco", amount: 450, currency: "PEN", exchangeRate: null, amountInPEN: 450, expenseType: "con_culpa", paymentStatus: "pendiente", person: "Brando", installment: "2/6", paymentMonth: 3, paymentYear: 2026, processDate: "2026-02-15T00:00:00Z", observation: "Viaje aniversario", creditCardId: "cc-4", createdAt: "2026-02-15T00:00:00Z", updatedAt: "2026-02-15T00:00:00Z" },
+];
+
+// ── Accounts Receivable ──
+export const seedAccountsReceivable: AccountReceivable[] = [
+  { id: "ar-1", description: "Almuerzo compartido", amount: 45, person: "Bryan", status: "pendiente", currency: "PEN", exchangeRate: null, amountInPEN: 45, dueDate: "2026-03-15T00:00:00Z", paidDate: null, paidAmount: null, observation: null, createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "ar-2", description: "Netflix compartido", amount: 22.45, person: "Alexander", status: "pendiente", currency: "PEN", exchangeRate: null, amountInPEN: 22.45, dueDate: "2026-03-20T00:00:00Z", paidDate: null, paidAmount: null, observation: "Su parte mensual", createdAt: "2026-03-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "ar-3", description: "Préstamo personal", amount: 200, person: "Dora", status: "parcial", currency: "PEN", exchangeRate: null, amountInPEN: 200, dueDate: "2026-03-30T00:00:00Z", paidDate: null, paidAmount: 100, observation: "Pagó 100 el 5/3", createdAt: "2026-02-15T00:00:00Z", updatedAt: "2026-03-05T00:00:00Z" },
+  { id: "ar-4", description: "Uber compartido", amount: 18.5, person: "Danery", status: "pagado", currency: "PEN", exchangeRate: null, amountInPEN: 18.5, dueDate: null, paidDate: "2026-03-08T00:00:00Z", paidAmount: 18.5, observation: null, createdAt: "2026-03-06T00:00:00Z", updatedAt: "2026-03-08T00:00:00Z" },
+];
+
+// ── Recurring Expenses ──
+export const seedRecurring: RecurringExpense[] = [
+  { id: "rec-1", description: "Luz - Enel", amount: 85, currency: "PEN", targetType: "fixed_cost", targetCardCode: null, categoryId: "cat-4", person: "Brando", account: "BCP", expenseType: "necesario", dayOfMonth: 15, isActive: true, lastGenerated: "2026-03-01T00:00:00Z", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "rec-2", description: "Internet - Movistar", amount: 89.9, currency: "PEN", targetType: "fixed_cost", targetCardCode: null, categoryId: "cat-4", person: "Brando", account: "Interbank", expenseType: "necesario", dayOfMonth: 10, isActive: true, lastGenerated: "2026-03-01T00:00:00Z", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "rec-3", description: "Gym", amount: 120, currency: "PEN", targetType: "fixed_cost", targetCardCode: null, categoryId: "cat-1", person: "Brando", account: null, expenseType: "con_culpa", dayOfMonth: 1, isActive: true, lastGenerated: "2026-03-01T00:00:00Z", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+  { id: "rec-4", description: "Préstamo hermana", amount: 500, currency: "PEN", targetType: "fixed_cost", targetCardCode: null, categoryId: "cat-2", person: "Brando", account: "Yape", expenseType: "necesario", dayOfMonth: 28, isActive: true, lastGenerated: "2026-03-01T00:00:00Z", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-01T00:00:00Z" },
+];
+
+// ── Category Budgets ──
+export const seedBudgets: CategoryBudget[] = [
+  { id: "bud-1", categoryId: "cat-4", monthlyLimit: 400, alertThreshold: 80, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "bud-2", categoryId: "cat-8", monthlyLimit: 500, alertThreshold: 80, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "bud-3", categoryId: "cat-1", monthlyLimit: 300, alertThreshold: 80, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "bud-4", categoryId: "cat-9", monthlyLimit: 250, alertThreshold: 90, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+];

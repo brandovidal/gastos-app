@@ -1,4 +1,4 @@
-import { prisma } from "@/shared/lib/prisma";
+import { appStore } from "@/mocks/store";
 
 export interface DashboardSummary {
   totalExpenses: number;
@@ -26,101 +26,82 @@ export interface CreditCardSummary {
   paymentDueDay: number;
 }
 
-export async function getDashboardSummary(month: number, year: number): Promise<DashboardSummary> {
-  const [fixedCosts, subscriptions, ccExpenses, summary] = await Promise.all([
-    prisma.fixedCost.aggregate({
-      where: { paymentMonth: month, paymentYear: year },
-      _sum: { amountInPEN: true, amount: true },
-    }),
-    prisma.subscription.aggregate({
-      where: { paymentMonth: month, paymentYear: year },
-      _sum: { amountInPEN: true, amount: true },
-    }),
-    prisma.creditCardExpense.aggregate({
-      where: { paymentMonth: month, paymentYear: year },
-      _sum: { amountInPEN: true, amount: true },
-    }),
-    prisma.monthlySummary.findUnique({
-      where: { month_year: { month, year } },
-    }),
-  ]);
+function sumField(items: Array<{ amountInPEN: number | null; amount: number }>): number {
+  return items.reduce((sum, i) => sum + (i.amountInPEN ?? i.amount), 0);
+}
 
-  const totalFixed = fixedCosts._sum.amountInPEN ?? fixedCosts._sum.amount ?? 0;
-  const totalSubs = subscriptions._sum.amountInPEN ?? subscriptions._sum.amount ?? 0;
-  const totalCC = ccExpenses._sum.amountInPEN ?? ccExpenses._sum.amount ?? 0;
+export function getDashboardSummary(month: number, year: number): DashboardSummary {
+  const s = appStore.getState();
+  const fc = s.fixedCosts.filter((i) => i.paymentMonth === month && i.paymentYear === year);
+  const subs = s.subscriptions.filter((i) => i.paymentMonth === month && i.paymentYear === year);
+  const cc = s.creditCardExpenses.filter((i) => i.paymentMonth === month && i.paymentYear === year);
+
+  const totalFixed = sumField(fc);
+  const totalSubs = sumField(subs);
+  const totalCC = sumField(cc);
   const totalExpenses = totalFixed + totalSubs + totalCC;
-  const salary = summary?.salary ?? 5000;
+
+  const necesario = [...fc, ...subs, ...cc].filter((i) => i.expenseType === "necesario");
+  const conCulpa = [...fc, ...subs, ...cc].filter((i) => i.expenseType === "con_culpa");
 
   return {
     totalExpenses,
     totalFixedCosts: totalFixed,
     totalSubscriptions: totalSubs,
     totalCreditCards: totalCC,
-    salary,
-    surplus: salary - totalExpenses,
-    totalNecesario: summary?.totalNecesario ?? 0,
-    totalConCulpa: summary?.totalConCulpa ?? 0,
+    salary: s.salary,
+    surplus: s.salary - totalExpenses,
+    totalNecesario: sumField(necesario),
+    totalConCulpa: sumField(conCulpa),
   };
 }
 
-export async function getCategoryBreakdown(month: number, year: number): Promise<CategoryBreakdown[]> {
-  const costs = await prisma.fixedCost.findMany({
-    where: { paymentMonth: month, paymentYear: year },
-    include: { category: true },
-  });
+export function getCategoryBreakdown(month: number, year: number): CategoryBreakdown[] {
+  const s = appStore.getState();
+  const costs = s.fixedCosts.filter((i) => i.paymentMonth === month && i.paymentYear === year);
 
   const map = new Map<string, { name: string; color: string; amount: number }>();
   for (const cost of costs) {
-    const key = cost.categoryId;
-    const existing = map.get(key);
+    const cat = s.categories.find((c) => c.id === cost.categoryId);
+    if (!cat) continue;
+    const existing = map.get(cost.categoryId);
     const amount = cost.amountInPEN ?? cost.amount;
     if (existing) {
       existing.amount += amount;
     } else {
-      map.set(key, { name: cost.category.name, color: cost.category.color, amount });
+      map.set(cost.categoryId, { name: cat.name, color: cat.color, amount });
     }
   }
 
   return Array.from(map.values()).sort((a, b) => b.amount - a.amount);
 }
 
-export async function getCreditCardSummaries(month: number, year: number): Promise<CreditCardSummary[]> {
-  const cards = await prisma.creditCard.findMany({
-    include: {
-      expenses: {
-        where: { paymentMonth: month, paymentYear: year },
-      },
-    },
+export function getCreditCardSummaries(month: number, year: number): CreditCardSummary[] {
+  const s = appStore.getState();
+  return s.creditCards.map((card) => {
+    const expenses = s.creditCardExpenses.filter(
+      (e) => e.creditCardId === card.id && e.paymentMonth === month && e.paymentYear === year,
+    );
+    return {
+      code: card.code,
+      name: card.name,
+      color: card.color,
+      billingCloseDay: card.billingCloseDay,
+      paymentDueDay: card.paymentDueDay,
+      total: sumField(expenses),
+    };
   });
-
-  return cards.map((card) => ({
-    code: card.code,
-    name: card.name,
-    color: card.color,
-    billingCloseDay: card.billingCloseDay,
-    paymentDueDay: card.paymentDueDay,
-    total: card.expenses.reduce((sum, e) => sum + (e.amountInPEN ?? e.amount), 0),
-  }));
 }
 
-export async function getExpensesByMonth(months: number = 6) {
+export function getExpensesByMonth(months: number = 6) {
   const now = new Date();
   const results = [];
-
   for (let i = months - 1; i >= 0; i--) {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    const summary = await getDashboardSummary(month, year);
-    results.push({
-      month,
-      year,
-      totalExpenses: summary.totalExpenses,
-      salary: summary.salary,
-      surplus: summary.surplus,
-    });
+    const m = date.getMonth() + 1;
+    const y = date.getFullYear();
+    const summary = getDashboardSummary(m, y);
+    results.push({ month: m, year: y, totalExpenses: summary.totalExpenses, salary: summary.salary, surplus: summary.surplus });
   }
-
   return results;
 }
