@@ -14,7 +14,8 @@ import {
 } from "@/ui/select";
 import { Plus, Trash2, ArrowLeft } from "lucide-react";
 import { formatDate } from "@/shared/lib/dates";
-import { CREDIT_CARD_STATUSES, PAYMENT_STATUS_LABELS } from "@/shared/constants";
+import { CREDIT_CARD_STATUSES, PAYMENT_STATUS_LABELS, PERSONS } from "@/shared/constants";
+import { InlineAddRow } from "@/shared/components/InlineAddRow";
 import { CreditCardExpenseDialog } from "./CreditCardExpenseDialog";
 
 interface CreditCardDetailProps {
@@ -24,16 +25,19 @@ interface CreditCardDetailProps {
 export function CreditCardDetail({ cardCode }: CreditCardDetailProps) {
   const creditCards = useAppStore((s) => s.creditCards);
   const expenses = useAppStore((s) => s.creditCardExpenses);
+  const addCreditCardExpense = useAppStore((s) => s.addCreditCardExpense);
   const updateExpense = useAppStore((s) => s.updateCreditCardExpense);
   const deleteExpense = useAppStore((s) => s.deleteCreditCardExpense);
 
+  const selectedMonth = useAppStore((s) => s.selectedMonth);
+  const selectedYear = useAppStore((s) => s.selectedYear);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const card = creditCards.find((c) => c.code === cardCode);
   if (!card) return <EmptyState title="Tarjeta no encontrada" />;
 
   const cardExpenses = expenses
-    .filter((e) => e.creditCardId === card.id && e.paymentMonth === 3 && e.paymentYear === 2026)
+    .filter((e) => e.creditCardId === card.id && e.paymentMonth === selectedMonth && e.paymentYear === selectedYear)
     .sort((a, b) => (b.processDate ?? "").localeCompare(a.processDate ?? ""));
 
   const total = cardExpenses.reduce((sum, e) => sum + (e.amountInPEN ?? e.amount), 0);
@@ -123,6 +127,35 @@ export function CreditCardDetail({ cardCode }: CreditCardDetailProps) {
                   </TableCell>
                 </TableRow>
               ))}
+              <InlineAddRow
+                totalColumns={7}
+                columns={[
+                  { key: "description", placeholder: "Descripción...", type: "text" },
+                  { key: "amount", placeholder: "Monto", type: "number" },
+                  { key: "person", placeholder: "Persona", type: "select", options: PERSONS.map((p) => ({ value: p, label: p })) },
+                ]}
+                onSave={(values) => {
+                  addCreditCardExpense({
+                    id: crypto.randomUUID(),
+                    description: values.description,
+                    amount: Number(values.amount),
+                    currency: "PEN",
+                    exchangeRate: null,
+                    amountInPEN: Number(values.amount),
+                    expenseType: "necesario",
+                    paymentStatus: "pendiente",
+                    person: values.person,
+                    installment: null,
+                    paymentMonth: selectedMonth,
+                    paymentYear: selectedYear,
+                    processDate: null,
+                    observation: null,
+                    creditCardId: card.id,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  });
+                }}
+              />
             </TableBody>
           </Table>
         </div>

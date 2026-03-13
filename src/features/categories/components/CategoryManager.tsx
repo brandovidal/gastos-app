@@ -15,6 +15,8 @@ export function CategoryManager() {
   const budgets = useAppStore((s) => s.budgets);
   const fixedCosts = useAppStore((s) => s.fixedCosts);
   const deleteCategory = useAppStore((s) => s.deleteCategory);
+  const selectedMonth = useAppStore((s) => s.selectedMonth);
+  const selectedYear = useAppStore((s) => s.selectedYear);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | undefined>();
 
@@ -29,7 +31,7 @@ export function CategoryManager() {
         {categories.map((cat) => {
           const budget = budgets.find((b) => b.categoryId === cat.id);
           const spent = fixedCosts
-            .filter((fc) => fc.categoryId === cat.id && fc.paymentMonth === 3 && fc.paymentYear === 2026)
+            .filter((fc) => fc.categoryId === cat.id && fc.paymentMonth === selectedMonth && fc.paymentYear === selectedYear)
             .reduce((sum, fc) => sum + (fc.amountInPEN ?? fc.amount), 0);
           const percent = budget ? (spent / budget.monthlyLimit) * 100 : 0;
           const isOverBudget = budget && percent > 100;

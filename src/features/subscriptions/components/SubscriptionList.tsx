@@ -9,6 +9,7 @@ import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
 import { Plus, Trash2, Pencil } from "lucide-react";
 import { SubscriptionDialog } from "./SubscriptionDialog";
+import { InlineAddCard } from "@/shared/components/InlineAddCard";
 import type { Subscription } from "../subscription.validator";
 
 const PERIOD_LABELS: Record<string, string> = {
@@ -31,11 +32,15 @@ const PERIOD_COLORS: Record<string, string> = {
 
 export function SubscriptionList() {
   const subscriptions = useAppStore((s) => s.subscriptions);
+  const addSubscription = useAppStore((s) => s.addSubscription);
   const deleteSubscription = useAppStore((s) => s.deleteSubscription);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingSub, setEditingSub] = useState<Subscription | undefined>();
 
-  const current = subscriptions.filter((s) => s.paymentMonth === 3 && s.paymentYear === 2026);
+  const selectedMonth = useAppStore((s) => s.selectedMonth);
+  const selectedYear = useAppStore((s) => s.selectedYear);
+
+  const current = subscriptions.filter((s) => s.paymentMonth === selectedMonth && s.paymentYear === selectedYear);
   const total = current.reduce((sum, s) => sum + (s.amountInPEN ?? s.amount), 0);
 
   return (
@@ -83,6 +88,30 @@ export function SubscriptionList() {
               </CardContent>
             </Card>
           ))}
+          <InlineAddCard
+            onSave={(values) => {
+              addSubscription({
+                id: crypto.randomUUID(),
+                description: values.description,
+                amount: Number(values.amount),
+                currency: "PEN",
+                exchangeRate: null,
+                amountInPEN: Number(values.amount),
+                expenseType: "necesario",
+                paymentStatus: "no_iniciado",
+                period: (values.period || "mensual") as "quincenal" | "mensual" | "trimestral" | "semestral" | "anual" | "exonerado",
+                person: values.person,
+                account: null,
+                paymentMonth: selectedMonth,
+                paymentYear: selectedYear,
+                paymentDate: null,
+                dueDate: null,
+                comment: null,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              });
+            }}
+          />
         </div>
       )}
 

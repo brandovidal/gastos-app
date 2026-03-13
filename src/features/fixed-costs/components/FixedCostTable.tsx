@@ -23,15 +23,20 @@ import {
 import { Input } from "@/ui/input";
 import { Plus, Search, Trash2, Pencil } from "lucide-react";
 import { formatDate } from "@/shared/lib/dates";
-import { PAYMENT_STATUSES, PAYMENT_STATUS_LABELS } from "@/shared/constants";
+import { PAYMENT_STATUSES, PAYMENT_STATUS_LABELS, PERSONS } from "@/shared/constants";
+import { InlineAddRow } from "@/shared/components/InlineAddRow";
 import { FixedCostDialog } from "./FixedCostDialog";
 import type { FixedCost } from "../fixed-cost.validator";
 
 export function FixedCostTable() {
   const fixedCosts = useAppStore((s) => s.fixedCosts);
   const categories = useAppStore((s) => s.categories);
+  const addFixedCost = useAppStore((s) => s.addFixedCost);
   const updateFixedCost = useAppStore((s) => s.updateFixedCost);
   const deleteFixedCost = useAppStore((s) => s.deleteFixedCost);
+
+  const selectedMonth = useAppStore((s) => s.selectedMonth);
+  const selectedYear = useAppStore((s) => s.selectedYear);
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -40,7 +45,7 @@ export function FixedCostTable() {
   const [editingItem, setEditingItem] = useState<FixedCost | undefined>();
 
   const filtered = fixedCosts
-    .filter((fc) => fc.paymentMonth === 3 && fc.paymentYear === 2026)
+    .filter((fc) => fc.paymentMonth === selectedMonth && fc.paymentYear === selectedYear)
     .filter((fc) => !search || fc.description.toLowerCase().includes(search.toLowerCase()))
     .filter((fc) => statusFilter === "all" || fc.paymentStatus === statusFilter)
     .filter((fc) => categoryFilter === "all" || fc.categoryId === categoryFilter);
@@ -171,6 +176,39 @@ export function FixedCostTable() {
                   </TableRow>
                 );
               })}
+              <InlineAddRow
+                totalColumns={8}
+                columns={[
+                  { key: "description", placeholder: "Descripción...", type: "text" },
+                  { key: "categoryId", placeholder: "Categoría", type: "select", options: categories.map((c) => ({ value: c.id, label: c.name })) },
+                  { key: "amount", placeholder: "Monto", type: "number" },
+                  { key: "person", placeholder: "Persona", type: "select", options: PERSONS.map((p) => ({ value: p, label: p })) },
+                ]}
+                onSave={(values) => {
+                  addFixedCost({
+                    id: crypto.randomUUID(),
+                    description: values.description,
+                    amount: Number(values.amount),
+                    currency: "PEN",
+                    exchangeRate: null,
+                    amountInPEN: Number(values.amount),
+                    expenseType: "necesario",
+                    paymentStatus: "no_iniciado",
+                    paymentDate: null,
+                    dueDate: null,
+                    attentionDate: null,
+                    paymentMonth: selectedMonth,
+                    paymentYear: selectedYear,
+                    account: null,
+                    installments: null,
+                    person: values.person,
+                    observation: null,
+                    categoryId: values.categoryId,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  });
+                }}
+              />
             </TableBody>
           </Table>
           <div className="flex items-center justify-between border-t px-4 py-3">

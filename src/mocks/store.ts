@@ -13,6 +13,12 @@ import {
   toAccountReceivable,
 } from "@/features/intake/intake.mapper";
 import {
+  toFixedCostFromRecurring,
+  toSubscriptionFromRecurring,
+  toCreditCardExpenseFromRecurring,
+} from "@/features/recurring/recurring.mapper";
+import { getCurrentMonth, getCurrentYear } from "@/shared/lib/dates";
+import {
   seedCategories,
   seedCreditCards,
   seedFixedCosts,
@@ -34,6 +40,9 @@ export interface AppState {
   recurring: RecurringExpense[];
   intakeItems: IntakeItem[];
   salary: number;
+  budgetLimitPercent: number;
+  selectedMonth: number;
+  selectedYear: number;
 }
 
 export interface AppActions {
@@ -72,6 +81,15 @@ export interface AppActions {
   deleteIntakeItem: (id: string) => void;
   dismissIntakeItem: (id: string) => void;
   classifyAndConfirmItem: (id: string, classification: Classification) => void;
+  // Period navigation
+  setSelectedMonth: (month: number) => void;
+  setSelectedYear: (year: number) => void;
+  setSelectedPeriod: (month: number, year: number) => void;
+  navigateMonth: (delta: number) => void;
+  setSalary: (salary: number) => void;
+  setBudgetLimitPercent: (percent: number) => void;
+  // Recurring generation
+  generateRecurringForMonth: (month: number, year: number) => number;
 }
 
 export type AppStore = AppState & AppActions;
@@ -112,6 +130,9 @@ export const appStore = createStore<AppStore>()((set) => {
     recurring: seedRecurring,
     intakeItems: [],
     salary: 5000,
+    budgetLimitPercent: 100,
+    selectedMonth: getCurrentMonth(),
+    selectedYear: getCurrentYear(),
 
     // Actions
     addFixedCost: fc.add(set),
@@ -187,6 +208,76 @@ export const appStore = createStore<AppStore>()((set) => {
 
         return updates;
       }),
+
+    // Period navigation
+    setSelectedMonth: (month: number) => set({ selectedMonth: month }),
+    setSelectedYear: (year: number) => set({ selectedYear: year }),
+    setSelectedPeriod: (month: number, year: number) => set({ selectedMonth: month, selectedYear: year }),
+    navigateMonth: (delta: number) =>
+      set((s) => {
+        let newMonth = s.selectedMonth + delta;
+        let newYear = s.selectedYear;
+        if (newMonth > 12) {
+          newMonth = 1;
+          newYear++;
+        } else if (newMonth < 1) {
+          newMonth = 12;
+          newYear--;
+        }
+        return { selectedMonth: newMonth, selectedYear: newYear };
+      }),
+    setSalary: (salary: number) => set({ salary }),
+    setBudgetLimitPercent: (percent: number) => set({ budgetLimitPercent: percent }),
+
+    // Recurring generation
+    generateRecurringForMonth: (month: number, year: number) => {
+      const s = appStore.getState();
+      const periodKey = `${year}-${String(month).padStart(2, "0")}`;
+      const active = s.recurring.filter((r) => r.isActive);
+
+      const toGenerate = active.filter((r) => {
+        if (!r.lastGenerated) return true;
+        return r.lastGenerated !== periodKey;
+      });
+
+      if (toGenerate.length === 0) return 0;
+
+      const newFixedCosts: FixedCost[] = [];
+      const newSubscriptions: Subscription[] = [];
+      const newCreditCardExpenses: CreditCardExpense[] = [];
+      const updatedRecurring = [...s.recurring];
+
+      for (const rec of toGenerate) {
+        switch (rec.targetType) {
+          case "fixed_cost":
+            newFixedCosts.push(toFixedCostFromRecurring(rec, month, year));
+            break;
+          case "subscription":
+            newSubscriptions.push(toSubscriptionFromRecurring(rec, month, year));
+            break;
+          case "credit_card_expense": {
+            const card = s.creditCards.find((c) => c.code === rec.targetCardCode);
+            newCreditCardExpenses.push(
+              toCreditCardExpenseFromRecurring(rec, month, year, card?.id ?? ""),
+            );
+            break;
+          }
+        }
+        const idx = updatedRecurring.findIndex((r) => r.id === rec.id);
+        if (idx !== -1) {
+          updatedRecurring[idx] = { ...updatedRecurring[idx], lastGenerated: periodKey, updatedAt: new Date().toISOString() };
+        }
+      }
+
+      set({
+        fixedCosts: [...s.fixedCosts, ...newFixedCosts],
+        subscriptions: [...s.subscriptions, ...newSubscriptions],
+        creditCardExpenses: [...s.creditCardExpenses, ...newCreditCardExpenses],
+        recurring: updatedRecurring,
+      });
+
+      return toGenerate.length;
+    },
   };
 });
 

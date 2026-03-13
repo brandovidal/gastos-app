@@ -14,9 +14,8 @@ export function SummaryOverview() {
   const creditCardExpenses = useAppStore((s) => s.creditCardExpenses);
   const creditCards = useAppStore((s) => s.creditCards);
   const salary = useAppStore((s) => s.salary);
-
-  const month = 3;
-  const year = 2026;
+  const month = useAppStore((s) => s.selectedMonth);
+  const year = useAppStore((s) => s.selectedYear);
 
   const fc = fixedCosts.filter((i) => i.paymentMonth === month && i.paymentYear === year);
   const subs = subscriptions.filter((i) => i.paymentMonth === month && i.paymentYear === year);

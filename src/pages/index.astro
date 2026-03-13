@@ -1,35 +1,8 @@
 ---
 import DashboardLayout from "@/layouts/DashboardLayout.astro";
-import { MonthlySummary } from "@/features/dashboard/components/MonthlySummary";
-import { ExpenseChart } from "@/features/dashboard/components/ExpenseChart";
-import { CategoryRing } from "@/features/dashboard/components/CategoryRing";
-import { BillingCycleCard } from "@/features/dashboard/components/BillingCycleCard";
-import {
-  getDashboardSummary,
-  getCategoryBreakdown,
-  getCreditCardSummaries,
-  getExpensesByMonth,
-} from "@/features/dashboard/dashboard.service";
-import { getCurrentMonth, getCurrentYear, getMonthName } from "@/shared/lib/dates";
-
-const month = getCurrentMonth();
-const year = getCurrentYear();
-
-const summary = getDashboardSummary(month, year);
-const categories = getCategoryBreakdown(month, year);
-const creditCards = getCreditCardSummaries(month, year);
-const trend = getExpensesByMonth(6);
+import { DashboardPage } from "@/features/dashboard/components/DashboardPage";
 ---
 
-<DashboardLayout title={`Dashboard - ${getMonthName(month)} ${year}`}>
-  <div class="space-y-6">
-    <MonthlySummary summary={summary} />
-
-    <div class="grid gap-6 md:grid-cols-2">
-      <ExpenseChart client:load data={trend} />
-      <CategoryRing client:load data={categories} />
-    </div>
-
-    <BillingCycleCard cards={creditCards} />
-  </div>
+<DashboardLayout title="Dashboard">
+  <DashboardPage client:load />
 </DashboardLayout>

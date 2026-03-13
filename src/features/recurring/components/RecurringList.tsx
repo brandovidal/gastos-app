@@ -7,7 +7,9 @@ import { Card, CardContent } from "@/ui/card";
 import { Switch } from "@/ui/switch";
 import { Plus, Trash2, Play, Calendar } from "lucide-react";
 import { formatCurrency } from "@/shared/lib/currency";
+import { getMonthName } from "@/shared/lib/dates";
 import { RecurringDialog } from "./RecurringDialog";
+import { toast } from "sonner";
 
 const TARGET_LABELS: Record<string, string> = {
   fixed_cost: "Costo fijo",
@@ -21,6 +23,9 @@ export function RecurringList() {
   const creditCards = useAppStore((s) => s.creditCards);
   const updateRecurring = useAppStore((s) => s.updateRecurring);
   const deleteRecurring = useAppStore((s) => s.deleteRecurring);
+  const generateRecurringForMonth = useAppStore((s) => s.generateRecurringForMonth);
+  const selectedMonth = useAppStore((s) => s.selectedMonth);
+  const selectedYear = useAppStore((s) => s.selectedYear);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const totalMonthly = recurring
@@ -39,7 +44,19 @@ export function RecurringList() {
           <p className="text-2xl font-bold">{formatCurrency(totalMonthly)} <span className="text-sm font-normal text-muted-foreground">/mes estimado</span></p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const count = generateRecurringForMonth(selectedMonth, selectedYear);
+              const monthName = getMonthName(selectedMonth);
+              if (count > 0) {
+                toast.success(`${count} gastos generados para ${monthName} ${selectedYear}`);
+              } else {
+                toast.info(`Ya se generaron los gastos de ${monthName} ${selectedYear}`);
+              }
+            }}
+          >
             <Play className="mr-1 h-4 w-4" /> Generar del mes
           </Button>
           <Button size="sm" onClick={() => setDialogOpen(true)}>
