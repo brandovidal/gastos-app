@@ -6,6 +6,7 @@ export const categorySchema = z.object({
   color: z.string().default("#6B7280"),
   icon: z.string().nullable().default(null),
   isDefault: z.boolean().default(false),
+  budgetGroupId: z.string().nullable().default(null),
   createdAt: z.string().default(() => new Date().toISOString()),
   updatedAt: z.string().default(() => new Date().toISOString()),
 });

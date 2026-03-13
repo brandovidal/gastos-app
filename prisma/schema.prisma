@@ -7,20 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ==================== GRUPOS PRESUPUESTARIOS ====================
+
+model BudgetGroup {
+  id         String   @id @default(cuid())
+  name       String   @unique
+  emoji      String   @default("📦")
+  percentage Float    @default(0)
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  categories Category[]
+
+  @@map("budget_groups")
+}
+
 // ==================== CATEGORÍAS DINÁMICAS ====================
 
 model Category {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  color     String   @default("#6B7280")
-  icon      String?
-  isDefault Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String       @id @default(cuid())
+  name          String       @unique
+  color         String       @default("#6B7280")
+  icon          String?
+  isDefault     Boolean      @default(false)
+  budgetGroupId String?
+  budgetGroup   BudgetGroup? @relation(fields: [budgetGroupId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 
   fixedCosts FixedCost[]
   budgets    CategoryBudget[]
 
+  @@index([budgetGroupId])
   @@map("categories")
 }
 

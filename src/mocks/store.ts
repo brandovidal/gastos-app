@@ -6,6 +6,7 @@ import type { Subscription } from "@/features/subscriptions/subscription.validat
 import type { AccountReceivable } from "@/features/accounts/account.validator";
 import type { RecurringExpense } from "@/features/recurring/recurring.validator";
 import type { IntakeItem, Classification } from "@/features/intake/intake.validator";
+import type { BudgetGroup } from "@/features/budget-groups/budget-group.validator";
 import {
   toFixedCost,
   toSubscription,
@@ -27,11 +28,14 @@ import {
   seedAccountsReceivable,
   seedRecurring,
   seedBudgets,
+  seedBudgetGroups,
+  seedIntakeItems,
 } from "./seed-data";
 
 export interface AppState {
   categories: Category[];
   budgets: CategoryBudget[];
+  budgetGroups: BudgetGroup[];
   creditCards: CreditCard[];
   fixedCosts: FixedCost[];
   subscriptions: Subscription[];
@@ -74,6 +78,10 @@ export interface AppActions {
   addRecurring: (item: RecurringExpense) => void;
   updateRecurring: (id: string, data: Partial<RecurringExpense>) => void;
   deleteRecurring: (id: string) => void;
+  // Budget Groups
+  addBudgetGroup: (item: BudgetGroup) => void;
+  updateBudgetGroup: (id: string, data: Partial<BudgetGroup>) => void;
+  deleteBudgetGroup: (id: string) => void;
   // Intake
   addIntakeItem: (item: IntakeItem) => void;
   addIntakeItems: (items: IntakeItem[]) => void;
@@ -117,18 +125,20 @@ export const appStore = createStore<AppStore>()((set) => {
   const cat = crudActions<Category>("categories");
   const bud = crudActions<CategoryBudget>("budgets");
   const rec = crudActions<RecurringExpense>("recurring");
+  const bg = crudActions<BudgetGroup>("budgetGroups");
 
   return {
     // State
     categories: seedCategories,
     budgets: seedBudgets,
+    budgetGroups: seedBudgetGroups,
     creditCards: seedCreditCards,
     fixedCosts: seedFixedCosts,
     subscriptions: seedSubscriptions,
     creditCardExpenses: seedCreditCardExpenses,
     accountsReceivable: seedAccountsReceivable,
     recurring: seedRecurring,
-    intakeItems: [],
+    intakeItems: seedIntakeItems,
     salary: 5000,
     budgetLimitPercent: 100,
     selectedMonth: getCurrentMonth(),
@@ -156,6 +166,9 @@ export const appStore = createStore<AppStore>()((set) => {
     addRecurring: rec.add(set),
     updateRecurring: rec.update(set),
     deleteRecurring: rec.delete(set),
+    addBudgetGroup: bg.add(set),
+    updateBudgetGroup: bg.update(set),
+    deleteBudgetGroup: bg.delete(set),
 
     // Intake actions
     addIntakeItem: (item: IntakeItem) =>

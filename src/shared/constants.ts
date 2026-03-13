@@ -72,6 +72,7 @@ export const INTAKE_DESTINATION_LABELS: Record<string, string> = {
 
 export const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: "layout-dashboard" },
+  { href: "/relacion-gastos", label: "Relación de Gastos", icon: "pie-chart" },
   { href: "/bandeja", label: "Bandeja", icon: "inbox" },
   { href: "/whatsapp", label: "WhatsApp", icon: "message-circle" },
   { href: "/costos-fijos", label: "Costos Fijos", icon: "receipt" },
@@ -83,3 +84,5 @@ export const NAV_ITEMS = [
   { href: "/resumen", label: "Resumen", icon: "bar-chart-3" },
   { href: "/ocr", label: "OCR", icon: "scan-text" },
 ] as const;
+
+export const SETTINGS_NAV = { href: "/configuracion", label: "Configuración", icon: "settings" } as const;

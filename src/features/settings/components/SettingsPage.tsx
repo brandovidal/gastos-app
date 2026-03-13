@@ -1,0 +1,165 @@
+import { useState } from "react";
+import { useAppStore } from "@/mocks/store";
+import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
+import { Input } from "@/ui/input";
+import { Button } from "@/ui/button";
+import { Badge } from "@/ui/badge";
+import { Save, User, Download, RotateCcw, DollarSign, PieChart, Settings, Palette } from "lucide-react";
+import { formatCurrency } from "@/shared/lib/currency";
+
+export function SettingsPage() {
+  const salary = useAppStore((s) => s.salary);
+  const budgetLimitPercent = useAppStore((s) => s.budgetLimitPercent);
+  const setSalary = useAppStore((s) => s.setSalary);
+  const setBudgetLimitPercent = useAppStore((s) => s.setBudgetLimitPercent);
+  const budgetGroups = useAppStore((s) => s.budgetGroups);
+  const updateBudgetGroup = useAppStore((s) => s.updateBudgetGroup);
+
+  const [salaryInput, setSalaryInput] = useState(salary.toString());
+  const [limitInput, setLimitInput] = useState(budgetLimitPercent.toString());
+
+  const handleSaveSalary = () => {
+    const val = parseFloat(salaryInput);
+    if (!isNaN(val) && val > 0) setSalary(val);
+    const lim = parseFloat(limitInput);
+    if (!isNaN(lim) && lim > 0 && lim <= 100) setBudgetLimitPercent(lim);
+  };
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+      {/* Sueldo y Presupuesto */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <DollarSign className="h-4 w-4" />
+            Sueldo y Presupuesto
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Sueldo mensual</label>
+              <Input
+                type="number"
+                value={salaryInput}
+                onChange={(e) => setSalaryInput(e.target.value)}
+                placeholder="5000"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Límite presupuesto (%)</label>
+              <Input
+                type="number"
+                value={limitInput}
+                onChange={(e) => setLimitInput(e.target.value)}
+                placeholder="100"
+              />
+            </div>
+          </div>
+          <Button size="sm" onClick={handleSaveSalary}>
+            <Save className="mr-1.5 h-3.5 w-3.5" />
+            Guardar
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Grupos de Presupuesto */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <PieChart className="h-4 w-4" />
+            Grupos de Presupuesto
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {budgetGroups
+            .slice()
+            .sort((a, b) => a.order - b.order)
+            .map((group) => (
+              <div key={group.id} className="flex items-center justify-between rounded-lg border p-3">
+                <div className="flex items-center gap-2">
+                  <span>{group.emoji}</span>
+                  <span className="text-sm font-medium">{group.name}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-muted-foreground">{group.percentage}%</span>
+                  <span className="text-sm font-medium">{formatCurrency((salary * group.percentage) / 100)}</span>
+                </div>
+              </div>
+            ))}
+          <p className="text-xs text-muted-foreground">
+            Edita los grupos en la página de{" "}
+            <a href="/relacion-gastos" className="text-primary underline">Relación de Gastos</a>
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Perfil */}
+      <Card className="opacity-60">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <User className="h-4 w-4" />
+            Perfil
+            <Badge variant="secondary" className="text-xs">Próximamente</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-muted-foreground">Nombre</label>
+              <Input disabled placeholder="Tu nombre" />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-muted-foreground">Email</label>
+              <Input disabled placeholder="tu@email.com" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Preferencias */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Palette className="h-4 w-4" />
+            Preferencias
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Tema</p>
+              <p className="text-xs text-muted-foreground">Usa el toggle en la barra superior para cambiar el tema</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Moneda predeterminada</p>
+              <p className="text-xs text-muted-foreground">PEN (Soles peruanos)</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Datos */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Settings className="h-4 w-4" />
+            Datos
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex gap-3">
+          <Button variant="outline" size="sm" disabled>
+            <Download className="mr-1.5 h-3.5 w-3.5" />
+            Exportar datos
+          </Button>
+          <Button variant="outline" size="sm" disabled className="text-destructive">
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+            Resetear datos
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -13,13 +13,13 @@ export function BillingCycleCard({ cards }: BillingCycleCardProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="h-5 w-5" />
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <CreditCard className="h-4 w-4" />
           Tarjetas de Crédito
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-1.5 pt-0">
         {cards.map((card) => {
           const daysUntilDue =
             card.paymentDueDay >= today
@@ -30,24 +30,19 @@ export function BillingCycleCard({ cards }: BillingCycleCardProps) {
           return (
             <div
               key={card.code}
-              className="flex items-center justify-between rounded-lg border p-3"
+              className="flex items-center justify-between py-1.5"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <div
-                  className="h-3 w-3 rounded-full"
+                  className="h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: card.color ?? "#6B7280" }}
                 />
-                <div>
-                  <p className="text-sm font-medium">{card.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Cierre: día {card.billingCloseDay} | Pago: día {card.paymentDueDay}
-                  </p>
-                </div>
+                <span className="text-sm">{card.name}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold">{formatCurrency(card.total)}</span>
                 {isUrgent && card.total > 0 && (
-                  <Badge variant="destructive" className="text-xs">
+                  <Badge variant="destructive" className="text-xs px-1.5 py-0">
                     {daysUntilDue}d
                   </Badge>
                 )}
@@ -55,8 +50,8 @@ export function BillingCycleCard({ cards }: BillingCycleCardProps) {
             </div>
           );
         })}
-        <div className="flex justify-between border-t pt-3">
-          <span className="text-sm font-medium">Total Tarjetas</span>
+        <div className="flex justify-between border-t pt-2">
+          <span className="text-xs font-medium text-muted-foreground">Total</span>
           <span className="text-sm font-bold">
             {formatCurrency(cards.reduce((sum, c) => sum + c.total, 0))}
           </span>

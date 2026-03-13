@@ -3,6 +3,7 @@ import { MonthlySummary } from "./MonthlySummary";
 import { ExpenseChart } from "./ExpenseChart";
 import { CategoryRing } from "./CategoryRing";
 import { BillingCycleCard } from "./BillingCycleCard";
+import { BudgetAllocationSummary } from "./BudgetAllocationSummary";
 import {
   getDashboardSummary,
   getCategoryBreakdown,
@@ -20,15 +21,18 @@ export function DashboardPage() {
   const trend = getExpensesByMonth(6);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <MonthlySummary summary={summary} />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <ExpenseChart data={trend} />
         <CategoryRing data={categories} />
       </div>
 
-      <BillingCycleCard cards={creditCards} />
+      <div className="grid gap-4 md:grid-cols-2">
+        <BudgetAllocationSummary month={selectedMonth} year={selectedYear} />
+        <BillingCycleCard cards={creditCards} />
+      </div>
     </div>
   );
 }

@@ -4,19 +4,21 @@ import type { FixedCost } from "@/features/fixed-costs/fixed-cost.validator";
 import type { Subscription } from "@/features/subscriptions/subscription.validator";
 import type { AccountReceivable } from "@/features/accounts/account.validator";
 import type { RecurringExpense } from "@/features/recurring/recurring.validator";
+import type { IntakeItem } from "@/features/intake/intake.validator";
+import type { BudgetGroup } from "@/features/budget-groups/budget-group.validator";
 
 // ── Categories ──
 export const seedCategories: Category[] = [
-  { id: "cat-1", name: "Personal", color: "#8B5CF6", icon: "user", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-2", name: "Prestamo", color: "#10B981", icon: "banknote", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-3", name: "Salud", color: "#3B82F6", icon: "heart-pulse", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-4", name: "Casa", color: "#6B7280", icon: "home", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-5", name: "Junta", color: "#EAB308", icon: "users", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-6", name: "Trabajo", color: "#64748B", icon: "briefcase", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-7", name: "Estudio", color: "#3B82F6", icon: "graduation-cap", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-8", name: "Comida", color: "#F97316", icon: "utensils", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-9", name: "Transporte", color: "#06B6D4", icon: "car", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
-  { id: "cat-10", name: "Entretenimiento", color: "#EC4899", icon: "gamepad-2", isDefault: true, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-1", name: "Personal", color: "#8B5CF6", icon: "user", isDefault: true, budgetGroupId: "bg-2", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-2", name: "Prestamo", color: "#10B981", icon: "banknote", isDefault: true, budgetGroupId: "bg-1", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-3", name: "Salud", color: "#3B82F6", icon: "heart-pulse", isDefault: true, budgetGroupId: "bg-1", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-4", name: "Casa", color: "#6B7280", icon: "home", isDefault: true, budgetGroupId: "bg-1", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-5", name: "Junta", color: "#EAB308", icon: "users", isDefault: true, budgetGroupId: "bg-4", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-6", name: "Trabajo", color: "#64748B", icon: "briefcase", isDefault: true, budgetGroupId: "bg-3", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-7", name: "Estudio", color: "#3B82F6", icon: "graduation-cap", isDefault: true, budgetGroupId: "bg-3", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-8", name: "Comida", color: "#F97316", icon: "utensils", isDefault: true, budgetGroupId: "bg-2", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-9", name: "Transporte", color: "#06B6D4", icon: "car", isDefault: true, budgetGroupId: "bg-1", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "cat-10", name: "Entretenimiento", color: "#EC4899", icon: "gamepad-2", isDefault: true, budgetGroupId: "bg-2", createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
 ];
 
 // ── Credit Cards ──
@@ -86,4 +88,26 @@ export const seedBudgets: CategoryBudget[] = [
   { id: "bud-2", categoryId: "cat-8", monthlyLimit: 500, alertThreshold: 80, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
   { id: "bud-3", categoryId: "cat-1", monthlyLimit: 300, alertThreshold: 80, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
   { id: "bud-4", categoryId: "cat-9", monthlyLimit: 250, alertThreshold: 90, month: null, year: null, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+];
+
+// ── Budget Groups ──
+export const seedBudgetGroups: BudgetGroup[] = [
+  { id: "bg-1", name: "Costos Fijos", emoji: "🏠", percentage: 45, order: 1, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "bg-2", name: "Gastos sin culpa", emoji: "🎉", percentage: 35, order: 2, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "bg-3", name: "Inversión", emoji: "📈", percentage: 10, order: 3, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "bg-4", name: "Ahorros", emoji: "💰", percentage: 10, order: 4, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+];
+
+// ── Intake Items ──
+export const seedIntakeItems: IntakeItem[] = [
+  { id: "intake-1", source: "whatsapp", sourceDocumentType: "yape_receipt", rawText: "Yape recibido de Bryan S/45.00", description: "Yape recibido de Bryan S/45.00", amount: 45, currency: "PEN", exchangeRate: null, date: "2026-03-10T00:00:00Z", account: "Yape", merchant: null, operationNumber: "OP-78234", installment: null, lineItems: null, status: "pending", classification: null, batchId: null, createdAt: "2026-03-10T08:30:00Z", updatedAt: "2026-03-10T08:30:00Z" },
+  { id: "intake-2", source: "whatsapp", sourceDocumentType: "whatsapp_text", rawText: "Pago luz Enel S/92.50 recibo marzo", description: "Pago luz Enel recibo marzo", amount: 92.5, currency: "PEN", exchangeRate: null, date: "2026-03-08T00:00:00Z", account: null, merchant: "Enel", operationNumber: null, installment: null, lineItems: null, status: "pending", classification: null, batchId: null, createdAt: "2026-03-08T14:20:00Z", updatedAt: "2026-03-08T14:20:00Z" },
+  { id: "intake-3", source: "whatsapp", sourceDocumentType: "yape_receipt", rawText: "Yape enviado a Danery S/30.00 almuerzo", description: "Yape enviado a Danery - almuerzo", amount: 30, currency: "PEN", exchangeRate: null, date: "2026-03-11T00:00:00Z", account: "Yape", merchant: null, operationNumber: "OP-78301", installment: null, lineItems: null, status: "classified", classification: { destination: "costo_fijo", creditCardId: null, categoryId: "cat-8", person: "Brando", expenseType: "necesario", observation: null }, batchId: null, createdAt: "2026-03-11T12:15:00Z", updatedAt: "2026-03-11T12:30:00Z" },
+  { id: "intake-4", source: "whatsapp", sourceDocumentType: "whatsapp_text", rawText: "Transferencia BCP S/150 cuota préstamo", description: "Transferencia BCP cuota préstamo", amount: 150, currency: "PEN", exchangeRate: null, date: "2026-03-09T00:00:00Z", account: "BCP", merchant: null, operationNumber: null, installment: "4/6", lineItems: null, status: "pending", classification: null, batchId: null, createdAt: "2026-03-09T09:45:00Z", updatedAt: "2026-03-09T09:45:00Z" },
+  { id: "intake-5", source: "ocr", sourceDocumentType: "estado_cuenta", rawText: null, description: "Cargo CMR - Wong supermercado", amount: 189.9, currency: "PEN", exchangeRate: null, date: "2026-03-07T00:00:00Z", account: null, merchant: "Wong", operationNumber: null, installment: null, lineItems: null, status: "classified", classification: { destination: "tarjeta_credito", creditCardId: "cc-1", categoryId: "cat-8", person: "Brando", expenseType: "necesario", observation: null }, batchId: "batch-1", createdAt: "2026-03-07T16:00:00Z", updatedAt: "2026-03-07T16:10:00Z" },
+  { id: "intake-6", source: "ocr", sourceDocumentType: "factura", rawText: null, description: "Factura farmacia Inkafarma", amount: 67.5, currency: "PEN", exchangeRate: null, date: "2026-03-06T00:00:00Z", account: null, merchant: "Inkafarma", operationNumber: null, installment: null, lineItems: [{ description: "Paracetamol x2", quantity: 2, unitPrice: 8.5, total: 17 }, { description: "Vitaminas", quantity: 1, unitPrice: 50.5, total: 50.5 }], status: "pending", classification: null, batchId: "batch-1", createdAt: "2026-03-06T10:00:00Z", updatedAt: "2026-03-06T10:00:00Z" },
+  { id: "intake-7", source: "ocr", sourceDocumentType: "banking_screenshot", rawText: null, description: "Cargo IO - Amazon Prime $6.99", amount: 6.99, currency: "USD", exchangeRate: 3.72, date: "2026-03-05T00:00:00Z", account: null, merchant: "Amazon", operationNumber: null, installment: null, lineItems: null, status: "classified", classification: { destination: "plataforma", creditCardId: null, categoryId: "cat-10", person: "Brando", expenseType: "con_culpa", observation: "Suscripción mensual" }, batchId: "batch-1", createdAt: "2026-03-05T11:30:00Z", updatedAt: "2026-03-05T11:45:00Z" },
+  { id: "intake-8", source: "email", sourceDocumentType: "email_notification", rawText: "Notificación Interbank: Cargo de S/42.00 en establecimiento UBER", description: "Notificación Interbank - cargo Uber", amount: 42, currency: "PEN", exchangeRate: null, date: "2026-03-12T00:00:00Z", account: "Interbank", merchant: "Uber", operationNumber: null, installment: null, lineItems: null, status: "pending", classification: null, batchId: null, createdAt: "2026-03-12T18:00:00Z", updatedAt: "2026-03-12T18:00:00Z" },
+  { id: "intake-9", source: "email", sourceDocumentType: "email_notification", rawText: "BCP te informa: Retiro Yape S/20.00 a Spotify", description: "Cargo Spotify vía Yape", amount: 20, currency: "PEN", exchangeRate: null, date: "2026-03-04T00:00:00Z", account: "Yape", merchant: "Spotify", operationNumber: null, installment: null, lineItems: null, status: "dismissed", classification: null, batchId: null, createdAt: "2026-03-04T07:00:00Z", updatedAt: "2026-03-04T07:15:00Z" },
+  { id: "intake-10", source: "whatsapp", sourceDocumentType: "yape_receipt", rawText: "Yape enviado a Gym S/120.00", description: "Pago mensualidad Gym", amount: 120, currency: "PEN", exchangeRate: null, date: "2026-03-01T00:00:00Z", account: "Yape", merchant: "Gym", operationNumber: "OP-77890", installment: null, lineItems: null, status: "pending", classification: null, batchId: null, createdAt: "2026-03-01T09:00:00Z", updatedAt: "2026-03-01T09:00:00Z" },
 ];

@@ -36,17 +36,17 @@ export function MonthlySummary({ summary }: MonthlySummaryProps) {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
       {cards.map((card) => (
-        <Card key={card.title}>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+        <Card key={card.title} className="py-3">
+          <CardHeader className="flex flex-row items-center justify-between px-4 pb-1 pt-0">
+            <CardTitle className="text-xs font-medium text-muted-foreground">
               {card.title}
             </CardTitle>
-            <card.icon className={`h-4 w-4 ${card.color}`} />
+            <card.icon className={`h-3.5 w-3.5 ${card.color}`} />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(card.value)}</div>
+          <CardContent className="px-4 pb-0">
+            <div className="text-xl font-bold">{formatCurrency(card.value)}</div>
             <p className="text-xs text-muted-foreground">
               {card.title === "Excedente"
                 ? `de ${formatCurrency(summary.salary)} de sueldo`
